@@ -1,4 +1,4 @@
-# Visitor Statistics for Bludit CMS
+# Visitor Statistics plugin for Bludit CMS
 
 This plugin is based on the original [Bludit CMS](https://www.bludit.com/) `Simple stats` plugin.
 
@@ -31,7 +31,7 @@ This plugin is based on the original [Bludit CMS](https://www.bludit.com/) `Simp
 ## Support
 Bludit plugin **Visitor Statistics** is open source and free. Donate for coffee or just like that:
 
-[BTC](bitcoin:bc1q9pe4at2zk9jrrx6sxw9d9ckqjgsj644eelzl03?message=VisitorStatistics): `bc1q9pe4at2zk9jrrx6sxw9d9ckqjgsj644eelzl03`
+[BTC](bitcoin:bc1q03v5la7uvcwxr7z4qn03ex6n5edju6zv4n6ppt?message=VisitorStatistics): `bc1q03v5la7uvcwxr7z4qn03ex6n5edju6zv4n6ppt`
 
 ## License
 **Visitor Statistics** is open source software licensed under the [MIT license](https://tldrlegal.com/license/mit-license).
