@@ -7,7 +7,7 @@
  * @author Elix
  * @url https://github.com/Elixcz/visitor-statistics
  * @email elix.code@gmail.com
- * @version 1.1.0
+ * @version 1.1.1
  * -----------------------------------------------------------------------
  */
 
@@ -16,7 +16,7 @@
 class visitorStatistics extends Plugin {
 
 	// Version of this plugin
-	private $build = '10100';
+	private $build = '10101';
 
 	// The number of days displayed in the chart
 	private $numOfDays = 31;
@@ -49,7 +49,7 @@ class visitorStatistics extends Plugin {
 	private $githubUrl = 'https://github.com/elixcz/visitor-statistics';
 
 	// Plugin site url
-	private $pluginUrl = 'https://elix.mzf.cz/';
+	private $pluginUrl = 'https://elix.mzf.cz/statistiky-navstevnosti-pro-bludit-cms';
 
 
 

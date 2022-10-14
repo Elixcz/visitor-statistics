@@ -9,7 +9,7 @@ class PluginFooter{
 	private $pluginUrl       = '';
 	private $pluginAuthor    = 'Elix';
 	private $pluginAuthorUrl = 'https://elix.mzf.cz';
-	private $otherPluginsUrl = 'https://elix.mzf.cz/rubrika/bludit';
+	private $otherPluginsUrl = 'https://elix.mzf.cz/rubrika/bludit-cms';
 	private $headerColor     = '#E9E9E9';
 	private $bodyColor       = '#FAFFFA';
 
