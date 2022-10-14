@@ -14,6 +14,7 @@ This plugin is based on the original [Bludit CMS](https://www.bludit.com/) `Simp
  - Logging of visits by search bots (Googlebot, Bingbot, etc.)
  - Option to disable logging of monitoring services such as Uptimerobot, Site24x7, etc.
  - Option to disable logging of logged in users
+ - Automatic notification of new version
  - And a lot of other useful functions and settings
 
 ## Plugin Visitor Statistics uses

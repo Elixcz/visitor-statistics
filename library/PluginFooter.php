@@ -9,6 +9,7 @@ class PluginFooter{
 	private $pluginUrl       = '';
 	private $pluginAuthor    = 'Elix';
 	private $pluginAuthorUrl = 'https://elix.mzf.cz';
+	private $otherPluginsUrl = 'https://elix.mzf.cz/rubrika/bludit';
 	private $headerColor     = '#E9E9E9';
 	private $bodyColor       = '#FAFFFA';
 
@@ -42,7 +43,7 @@ class PluginFooter{
 		$html .= '</div>' . PHP_EOL;
 		$html .= '<div class="card-body" style="background:' . $this->bodyColor . ';">' . PHP_EOL;
 		$html .= '<p>' . $this->pluginLang->get('Please support the development and updates of this plugin.') . ' ' . $this->pluginLang->get('Every donation will increase the motivation to continue working on this plugin.') . '</p><p class="text-center pt-1 pb-1 "><a href="bitcoin://bc1q03v5la7uvcwxr7z4qn03ex6n5edju6zv4n6ppt" title="BTC" target="_blank" class="btn btn-success btn-large">DONATE BTC</a><br><br><code>bc1q03v5la7uvcwxr7z4qn03ex6n5edju6zv4n6ppt</code></p>' . PHP_EOL;
-		$html .= '<div class="row my-2 border-top pt-1"><div class="col-sm-12 col-lg-4 pt-1"><strong>' . $this->pluginLang->get('Source code') . ':</strong><br><a href="' . $this->pluginUrl . '" target="_blank">' . $this->pluginUrl . '</a></div><div class="col-sm-12 col-lg-4 pt-1"><strong>' . $this->pluginLang->get('Author') . ':</strong><br><a href="' . $this->pluginAuthorUrl . '" target="_blank">' . $this->pluginAuthorUrl . '</a></div><div class="col-sm-12 col-lg-4 pt-1"><strong>' . $this->pluginLang->get('Other plugins and themes') . ':</strong><br><a href="' . $this->pluginAuthorUrl . '" target="_blank">' . $this->pluginAuthorUrl . '</a></div></div>' . PHP_EOL;
+		$html .= '<div class="row my-2 border-top pt-1"><div class="col-sm-12 col-lg-4 pt-1"><strong>' . $this->pluginLang->get('Source code') . ':</strong><br><a href="' . $this->pluginUrl . '" target="_blank">' . $this->pluginUrl . '</a></div><div class="col-sm-12 col-lg-4 pt-1"><strong>' . $this->pluginLang->get('Author') . ':</strong><br><a href="' . $this->pluginAuthorUrl . '" target="_blank">' . $this->pluginAuthorUrl . '</a></div><div class="col-sm-12 col-lg-4 pt-1"><strong>' . $this->pluginLang->get('Other plugins and themes') . ':</strong><br><a href="' . $this->otherPluginsUrl . '" target="_blank">' . $this->otherPluginsUrl . '</a></div></div>' . PHP_EOL;
 		$html .= '</div>' . PHP_EOL;
 		$html .= '</div></div></div>' . PHP_EOL;
 		$html .= '<p class="clearfix"></p>' . PHP_EOL;

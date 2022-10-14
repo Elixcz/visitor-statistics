@@ -7,7 +7,7 @@
  * @author Elix
  * @url https://github.com/Elixcz/visitor-statistics
  * @email elix.code@gmail.com
- * @version 1.0.0
+ * @version 1.1.0
  * -----------------------------------------------------------------------
  */
 
@@ -15,7 +15,8 @@
 
 class visitorStatistics extends Plugin {
 
-
+	// Version of this plugin
+	private $build = '10100';
 
 	// The number of days displayed in the chart
 	private $numOfDays = 31;
@@ -25,10 +26,6 @@ class visitorStatistics extends Plugin {
 
 	// The color of the unique visits graph
 	private $uniqueVisitsChartBgrColor = '#064AA0';
-
-	// A temporary variable containing a list of all log names for the last month.
-	// used in the getVisitsPerMonth() and getUniqueVisitsPerMonth() methods.
-	private $tmp_logs;
 
 	// The path to the data folder
 	private $dataPath = '/data/';
@@ -44,6 +41,16 @@ class visitorStatistics extends Plugin {
 	// does not have to be opened every time.
 	private $botsList = array();
 
+	// A temporary variable containing a list of all log names for the last month.
+	// used in the getVisitsPerMonth() and getUniqueVisitsPerMonth() methods.
+	private $tmp_logs;
+
+	// Github repository url
+	private $githubUrl = 'https://github.com/elixcz/visitor-statistics';
+
+	// Plugin site url
+	private $pluginUrl = 'https://elix.mzf.cz/';
+
 
 
 	/** Init plugin
@@ -57,110 +64,6 @@ class visitorStatistics extends Plugin {
 			'numEntriesInLog' => 25,
 			'excludeUsers' => true
 		);
-	}
-
-
-
-	/** Plugin settings page
-	 *
-	 * @return void;
-	 */
-	public function form()
-	{
-		global $L;
-		$html = '';
-		$html .= PHP_EOL . '<!-- Plugin Visitor Statistics -->' . PHP_EOL;
-		$html .= '<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">' . PHP_EOL;
-		$html .= '<style>.visitor-statistics-font, .card{font-family:Nunito,sans;font-size:1rem;}</style>' . PHP_EOL;
-
-		$html .= '<hr>';
-
-		if ( pluginActivated('pluginSimpleStats') )
-		{
-			deactivatePlugin('pluginSimpleStats');
-			if ( pluginActivated('pluginSimpleStats') )
-			{
-				$html .= '<div class="alert alert-danger alert-dismissible fade show visitor-statistics-font mt-2 mb-2" role="alert">';
-				$html .= $L->get('Plugin Simple stats is active. Deactivate it!');
-				$html .= '<button type="button" class="close" data-dismiss="alert" aria-label="' . $L->get('Close') . '"><span aria-hidden="true">&times;</span></button>';
-				$html .= '</div>';
-			}
-		}
-
-		$html .= '<div class="card shadow mt-4">';
-		$html .= '<div class="card-header" style="background-color:#E9E9E9;text-shadow: 1px 1px 0 #fff;">';
-		$html .= '<strong>'.$L->get('Show the chart on dashboard').'</strong>';
-		$html .= '</div>';
-		$html .= '<div class="card-body">';
-		$html .= '<select name="showChartOnDashboard">';
-		$html .= '<option value="true" ' . ( $this->getValue('showChartOnDashboard') === true ? 'selected' : '') . '>' . $L->get('Enabled').'</option>';
-		$html .= '<option value="false" ' . ( $this->getValue('showChartOnDashboard') === false ? 'selected' : '') . '>' . $L->get('Disabled').'</option>';
-		$html .= '</select>';
-		$html .= '<p class="card-text pt-2 text-muted small">'.$L->get('Enable this option to display the visits graph on the dashboard.').'</p>';
-		$html .= '</div>';
-		$html .= '</div>';
-
-		$html .= '<div class="card shadow mt-4">';
-		$html .= '<div class="card-header" style="background-color:#E9E9E9;text-shadow: 1px 1px 0 #fff;">';
-		$html .= '<strong>'.$L->get('Exclude monitoring services from visits chart').'</strong>';
-		$html .= '</div>';
-		$html .= '<div class="card-body">';
-		$html .= '<select name="excludeMonitoringServices">';
-		$html .= '<option value="true" ' . ( $this->getValue('excludeMonitoringServices') === true ? 'selected' : '') . '>' . $L->get('Enabled').'</option>';
-		$html .= '<option value="false" ' . ( $this->getValue('excludeMonitoringServices') === false ? 'selected' : '') . '>' . $L->get('Disabled').'</option>';
-		$html .= '</select>';
-		$html .= '<p class="card-text pt-2 text-muted small">'.$L->get('enable-this-option-to-disable-access-logging-for-monitoring-services').'</p>';
-		$html .= '</div>';
-		$html .= '</div>';
-
-		$html .= '<div class="card shadow mt-4">';
-		$html .= '<div class="card-header" style="background-color:#E9E9E9;text-shadow: 1px 1px 0 #fff;">';
-		$html .= '<strong>'.$L->get('Exclude bots from visits chart').'</strong>';
-		$html .= '</div>';
-		$html .= '<div class="card-body">';
-		$html .= '<select name="excludeBots">';
-		$html .= '<option value="true" ' . ( $this->getValue('excludeBots') === true ? 'selected' : '') . '>' . $L->get('Enabled').'</option>';
-		$html .= '<option value="false" ' . ( $this->getValue('excludeBots') === false ? 'selected' : '') . '>' . $L->get('Disabled').'</option>';
-		$html .= '</select>';
-		$html .= '<p class="card-text pt-2 text-muted small">'.$L->get('exclude-bots-from-visits-chart-description').'</p>';
-		$html .= '</div>';
-		$html .= '</div>';
-
-		$html .= '<div class="card shadow mt-4">';
-		$html .= '<div class="card-header" style="background-color:#E9E9E9;text-shadow: 1px 1px 0 #fff;">';
-		$html .= '<strong>'.$L->get('Exclude logged in users from visits chart').'</strong>';
-		$html .= '</div>';
-		$html .= '<div class="card-body">';
-		$html .= '<select name="excludeUsers">';
-		$html .= '<option value="true" ' . ( $this->getValue('excludeUsers') === true ? 'selected' : '') . '>' . $L->get('Enabled').'</option>';
-		$html .= '<option value="false" ' . ( $this->getValue('excludeUsers') === false ? 'selected' : '') . '>' . $L->get('Disabled').'</option>';
-		$html .= '</select>';
-		$html .= '<p class="card-text pt-2 text-muted small">'.$L->get('Logged in users in the administration will not be recorded as visits.').'</p>';
-		$html .= '</div>';
-		$html .= '</div>';
-
-		$html .= '<div class="card shadow mt-4">';
-		$html .= '<div class="card-header" style="background-color:#E9E9E9;text-shadow: 1px 1px 0 #fff;">';
-		$html .= '<strong>'.$L->get('the-number-of-displayed-entries').'</strong>';
-		$html .= '</div>';
-		$html .= '<div class="card-body">';
-		$html .= '<select name="numEntriesInLog">';
-		$html .= '<option value="10" ' . ( $this->getValue('numEntriesInLog') == 10 ? 'selected' : '') . '>10 ' . $L->get('rows').'</option>';
-		$html .= '<option value="25" ' . ( $this->getValue('numEntriesInLog') == 25 ? 'selected' : '') . '>25 ' . $L->get('rows (recomended)').'</option>';
-		$html .= '<option value="50" ' . ( $this->getValue('numEntriesInLog') == 50 ? 'selected' : '') . '>50 ' . $L->get('rows').'</option>';
-		$html .= '<option value="75" ' . ( $this->getValue('numEntriesInLog') == 75 ? 'selected' : '') . '>75 ' . $L->get('rows').'</option>';
-		$html .= '<option value="100" ' . ( $this->getValue('numEntriesInLog') == 100 ? 'selected' : '') . '>100 ' . $L->get('rows').'</option>';
-		$html .= '</select>';
-		$html .= '<p class="card-text pt-2 text-muted small">'.$L->get('the-number-of-displayed-entries-description').'</p>';
-		$html .= '</div>';
-		$html .= '</div>';
-
-		$html .= '<p class="clearfix"></p>' . PHP_EOL;
-		$html .= $this->getPluginFooter();
-		$html .= '<p class="clearfix"></p>' . PHP_EOL;
-
-		$html .= PHP_EOL . '<!-- /Plugin Visitor Statistics -->' . PHP_EOL;
-		return $html;
 	}
 
 
@@ -188,6 +91,7 @@ class visitorStatistics extends Plugin {
 
 		if ( pluginActivated('pluginSimpleStats') )
 		{
+			$this->moveSimpleStatsLogs();
 			deactivatePlugin('pluginSimpleStats');
 			if ( pluginActivated('pluginSimpleStats') )
 			{
@@ -310,13 +214,107 @@ EOF;
 
 
 
-	/** Add new visitor from administration page in to log
+	/** Plugin settings page
 	 *
-	 * @return void
+	 * @return void;
 	 */
-	public function adminBodyEnd()
+	public function form()
 	{
-		$this->addNewVisit();
+		global $L;
+		$html = '';
+		$html .= PHP_EOL . '<!-- Plugin Visitor Statistics -->' . PHP_EOL;
+		$html .= '<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">' . PHP_EOL;
+		$html .= '<style>.visitor-statistics-font, .card{font-family:Nunito,sans;font-size:1rem;}</style>' . PHP_EOL;
+
+		$html .= '<hr>';
+
+		if ( pluginActivated('pluginSimpleStats') )
+		{
+			$this->moveSimpleStatsLogs();
+			deactivatePlugin('pluginSimpleStats');
+			if ( pluginActivated('pluginSimpleStats') )
+			{
+				$html .= '<div class="alert alert-danger alert-dismissible fade show visitor-statistics-font mt-2 mb-2" role="alert">';
+				$html .= $L->get('Plugin Simple stats is active. Deactivate it!');
+				$html .= '<button type="button" class="close" data-dismiss="alert" aria-label="' . $L->get('Close') . '"><span aria-hidden="true">&times;</span></button>';
+				$html .= '</div>';
+			}
+		}
+
+		$html .= '<div class="card shadow mt-4">';
+		$html .= '<div class="card-header" style="background-color:#E9E9E9;text-shadow: 1px 1px 0 #fff;">';
+		$html .= '<strong>'.$L->get('Show the chart on dashboard').'</strong>';
+		$html .= '</div>';
+		$html .= '<div class="card-body">';
+		$html .= '<select name="showChartOnDashboard">';
+		$html .= '<option value="true" ' . ( $this->getValue('showChartOnDashboard') === true ? 'selected' : '') . '>' . $L->get('Enabled').'</option>';
+		$html .= '<option value="false" ' . ( $this->getValue('showChartOnDashboard') === false ? 'selected' : '') . '>' . $L->get('Disabled').'</option>';
+		$html .= '</select>';
+		$html .= '<p class="card-text pt-2 text-muted small">'.$L->get('Enable this option to display the visits graph on the dashboard.').'</p>';
+		$html .= '</div>';
+		$html .= '</div>';
+
+		$html .= '<div class="card shadow mt-4">';
+		$html .= '<div class="card-header" style="background-color:#E9E9E9;text-shadow: 1px 1px 0 #fff;">';
+		$html .= '<strong>'.$L->get('Exclude monitoring services from visits chart').'</strong>';
+		$html .= '</div>';
+		$html .= '<div class="card-body">';
+		$html .= '<select name="excludeMonitoringServices">';
+		$html .= '<option value="true" ' . ( $this->getValue('excludeMonitoringServices') === true ? 'selected' : '') . '>' . $L->get('Enabled').'</option>';
+		$html .= '<option value="false" ' . ( $this->getValue('excludeMonitoringServices') === false ? 'selected' : '') . '>' . $L->get('Disabled').'</option>';
+		$html .= '</select>';
+		$html .= '<p class="card-text pt-2 text-muted small">'.$L->get('enable-this-option-to-disable-access-logging-for-monitoring-services').'</p>';
+		$html .= '</div>';
+		$html .= '</div>';
+
+		$html .= '<div class="card shadow mt-4">';
+		$html .= '<div class="card-header" style="background-color:#E9E9E9;text-shadow: 1px 1px 0 #fff;">';
+		$html .= '<strong>'.$L->get('Exclude bots from visits chart').'</strong>';
+		$html .= '</div>';
+		$html .= '<div class="card-body">';
+		$html .= '<select name="excludeBots">';
+		$html .= '<option value="true" ' . ( $this->getValue('excludeBots') === true ? 'selected' : '') . '>' . $L->get('Enabled').'</option>';
+		$html .= '<option value="false" ' . ( $this->getValue('excludeBots') === false ? 'selected' : '') . '>' . $L->get('Disabled').'</option>';
+		$html .= '</select>';
+		$html .= '<p class="card-text pt-2 text-muted small">'.$L->get('exclude-bots-from-visits-chart-description').'</p>';
+		$html .= '</div>';
+		$html .= '</div>';
+
+		$html .= '<div class="card shadow mt-4">';
+		$html .= '<div class="card-header" style="background-color:#E9E9E9;text-shadow: 1px 1px 0 #fff;">';
+		$html .= '<strong>'.$L->get('Exclude logged in users from visits chart').'</strong>';
+		$html .= '</div>';
+		$html .= '<div class="card-body">';
+		$html .= '<select name="excludeUsers">';
+		$html .= '<option value="true" ' . ( $this->getValue('excludeUsers') === true ? 'selected' : '') . '>' . $L->get('Enabled').'</option>';
+		$html .= '<option value="false" ' . ( $this->getValue('excludeUsers') === false ? 'selected' : '') . '>' . $L->get('Disabled').'</option>';
+		$html .= '</select>';
+		$html .= '<p class="card-text pt-2 text-muted small">'.$L->get('Logged in users in the administration will not be recorded as visits.').'</p>';
+		$html .= '</div>';
+		$html .= '</div>';
+
+		$html .= '<div class="card shadow mt-4">';
+		$html .= '<div class="card-header" style="background-color:#E9E9E9;text-shadow: 1px 1px 0 #fff;">';
+		$html .= '<strong>'.$L->get('the-number-of-displayed-entries').'</strong>';
+		$html .= '</div>';
+		$html .= '<div class="card-body">';
+		$html .= '<select name="numEntriesInLog">';
+		$html .= '<option value="10" ' . ( $this->getValue('numEntriesInLog') == 10 ? 'selected' : '') . '>10 ' . $L->get('rows').'</option>';
+		$html .= '<option value="25" ' . ( $this->getValue('numEntriesInLog') == 25 ? 'selected' : '') . '>25 ' . $L->get('rows (recomended)').'</option>';
+		$html .= '<option value="50" ' . ( $this->getValue('numEntriesInLog') == 50 ? 'selected' : '') . '>50 ' . $L->get('rows').'</option>';
+		$html .= '<option value="75" ' . ( $this->getValue('numEntriesInLog') == 75 ? 'selected' : '') . '>75 ' . $L->get('rows').'</option>';
+		$html .= '<option value="100" ' . ( $this->getValue('numEntriesInLog') == 100 ? 'selected' : '') . '>100 ' . $L->get('rows').'</option>';
+		$html .= '</select>';
+		$html .= '<p class="card-text pt-2 text-muted small">'.$L->get('the-number-of-displayed-entries-description').'</p>';
+		$html .= '</div>';
+		$html .= '</div>';
+
+		$html .= '<p class="clearfix"></p>' . PHP_EOL;
+		$html .= $this->getPluginFooter();
+		$html .= '<p class="clearfix"></p>' . PHP_EOL;
+
+		$html .= PHP_EOL . '<!-- /Plugin Visitor Statistics -->' . PHP_EOL;
+		return $html;
 	}
 
 
@@ -336,6 +334,29 @@ EOF;
 			}
 		}
 		@clearstatcache();
+	}
+
+
+
+	/** Moving Simple stats logs to this workspace after deactivating plugin
+	 *
+	 * @return void
+	 */
+	private function moveSimpleStatsLogs()
+	{
+		// Move logs from Simple stats workspace in to Visitor Statistics workspace
+		$ss_logs = Filesystem::listFiles( PATH_WORKSPACES . 'simple-stats', '*', 'log', false );
+		$old_log = '';
+		if( count($ss_logs) > 0 )
+		{
+			foreach( $ss_logs as $old_log)
+			{
+				// Fix for prevent overwriting file with same name
+				if( file_exists( $this->workspace() . $old_log ) ) continue;
+
+				@copy( PATH_WORKSPACES . 'simple-stats' . DS . $old_log, $this->workspace() . $old_log );
+			}
+		}
 	}
 
 
@@ -436,7 +457,7 @@ EOF;
 	 *
 	 * @return void|false
 	 */
-	public function addNewVisit()
+	private function addNewVisit()
 	{
 		global $L;
 
@@ -882,23 +903,6 @@ EOF;
 
 
 
-	/** Return link in admin menu
-	 *
-	 * @return string
-	 */
-	public function adminSidebar()
-	{
-		global $L;
-		$pluginName = Text::lowercase(__CLASS__);
-		$url = HTML_PATH_ADMIN_ROOT . 'plugin/' . $pluginName;
-		$html = PHP_EOL . '<!-- Plugin Visitor Statistics -->' . PHP_EOL;
-		$html .= '<a id="visitor-statistics" class="nav-link" href="' . $url . '" title="' . $L->get('Visitor Statistics') . '"><img src="' . DOMAIN_PLUGINS . basename( dirname( __FILE__ ) ) . '/img/chart.png" alt="" width="16" height="16" class="mr-1 me-1">' . $L->get('Visitor Statistics') . '</a>' . PHP_EOL;
-		$html .= '<!-- /Plugin Visitor Statistics -->' . PHP_EOL;
-		return $html;
-	}
-
-
-
 	/** Plugin page in administration
 	 *
 	 * @return void
@@ -907,6 +911,8 @@ EOF;
     {
 		global $L;
 		global $site;
+
+		$visitor_statistics_version = $this->build;
 
 		$currentDate = Date::current( 'Y-m-d' );
 		$visitsToday = $this->getVisitsByDate( $currentDate );
@@ -931,6 +937,7 @@ EOF;
 		$html .= '<style>.visitor-statistics-plugin-page{font-family:Nunito,sans;font-size:1rem;}a.info-link, img.browser-ico, img.platform-ico, img.info-ico, .badge{ cursor:help !important;}@media (max-width: 992px){ h3.visitor-statistics-title{padding-top:2rem!important;}.card{margin-top:1rem;}.referer{display:none !important;}}</style>' . PHP_EOL;
 		$html .= '<div class="visitor-statistics-plugin-page">' . PHP_EOL;
 		$html .= '<h2><img src="' . DOMAIN_PLUGINS . basename( dirname( __FILE__ ) ) . '/img/chart.png" alt="" width="30" height="30" class="mr-2">' . $L->get('Visitor Statistics') . '</h2>' . PHP_EOL;
+		$html .= $this->getUpdateMessage();
 		$html .= '<div class="visitor-statistics-plugin"><div class="mb-2 pb-2 border-top pt-2"><div class="chart-container" style="position: relative; height:50% !important; width:100%; font-size: 90%;"><canvas id="visitorStatisticsChart" aria-label="Visits Stats" role="img">' . $L->get('Your browser does not support the canvas element.') . '</canvas></div></div></div>';
 		$html .= '<p class="clearfix py-1 my-1"></p>' . PHP_EOL;
 		$html .= '<div class="row mb-4">' . PHP_EOL;
@@ -1011,7 +1018,10 @@ EOF;
 	};
 	const myChart = new Chart( document.getElementById('visitorStatisticsChart'), config );
 </script>
+
 EOF;
+
+		$script .= $this->getUpdateScript();
 		$this->deleteOldLogs();
 		return $html.PHP_EOL.$script.PHP_EOL;
     }
@@ -1036,6 +1046,61 @@ EOF;
 </div><div class="modal-footer"><button type="button" class="btn btn-danger" data-dismiss="modal">' . $L->get('Close') . '</button>
 </div></div></div></div>';
 		return $html;
+	}
+
+
+	/** Message if new version of this plugin is avalaible
+	 *
+	 * @return string HTML
+	 */
+	private function getUpdateMessage()
+	{
+		global $L;
+
+		$html = '';
+		$html .= '<div class="alert alert-warning mt-2 mb-2" id="visitorStatisticsUpdate" style="display:none">';
+		$html .= '<h4 class="border-bottom border-warning">' . $L->get('New version of plugin') . ' ' . $L->get('Visitor Statistics') . ' ' . $L->get('is avalaible.') . '</h4>';
+		$html .= '<p>' . $L->get('We recommend downloading and install the new version from') . ' <a href="' . $this->githubUrl . '" rel="noreferer" title="Github">Github</a> ' . $L->get('or from') . ' <a href="' . $this->pluginUrl . '" title="' . $L->get('author website') . '">' . $L->get('author website') . '</a>.</p>';
+		$html .= '</div>';
+
+		return $html;
+	}
+
+
+
+	/** Return JS script for checking new version of this plugin
+	 *
+	 * @return string HTML
+	 */
+	private function getUpdateScript()
+	{
+		$visitor_statistics_version = $this->build;
+		$update_url = 'https://elix.mzf.cz/versions/visitor-statistics.json';
+		$script = <<<EOF
+<script>
+$.ajax({
+		url: "$update_url",
+		method: "GET",
+		async: true,
+		cache: false,
+		dataType: 'json',
+		headers: {
+              "accept": "application/json",
+              "Access-Control-Allow-Origin":"*"
+          },
+		success: function(json) {
+			if (json.stable.build > $visitor_statistics_version) {
+				$("#visitorStatisticsUpdate").show();
+			}
+		},
+		error: function(json) {
+			console.log("[WARN] [PLUGIN Visitor Statistics] An error occurred while downloading information about the new version of the plugin.");
+		}
+	});
+</script>
+EOF;
+
+		return $script;
 	}
 
 
@@ -1064,4 +1129,33 @@ EOF;
         global $L;
         $layout["title"] = $L->get('Visitor Statistics') . ' | Bludit';
     }
-}
+
+
+
+    /** Return link in admin menu
+	 *
+	 * @return string
+	 */
+	public function adminSidebar()
+	{
+		global $L;
+		$pluginName = Text::lowercase(__CLASS__);
+		$url = HTML_PATH_ADMIN_ROOT . 'plugin/' . $pluginName;
+		$html = PHP_EOL . '<!-- Plugin Visitor Statistics -->' . PHP_EOL;
+		$html .= '<a id="visitor-statistics" class="nav-link" href="' . $url . '" title="' . $L->get('Visitor Statistics') . '"><img src="' . DOMAIN_PLUGINS . basename( dirname( __FILE__ ) ) . '/img/chart.png" alt="" width="16" height="16" class="mr-1 me-1">' . $L->get('Visitor Statistics') . '</a>' . PHP_EOL;
+		$html .= '<!-- /Plugin Visitor Statistics -->' . PHP_EOL;
+		return $html;
+	}
+
+
+
+    /** Add new visitor from administration page in to log
+	 *
+	 * @return void
+	 */
+	public function adminBodyEnd()
+	{
+		$this->addNewVisit();
+	}
+
+}// End class

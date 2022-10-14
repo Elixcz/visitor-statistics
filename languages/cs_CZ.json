@@ -41,5 +41,10 @@
 	"rows-(recomended)": "řádků (doporučeno)",
 	"the-number-of-displayed-entries-description": "",
 	"exclude-logged-in-users-from-visits-chart": "Nezobrazovat v grafu přihlášené uživatele",
-	"logged-in-users-in-the-administration-will-not-be-recorded-as-visits": "Přihlášení uživatelé v administraci se nebudou zaznamenávat mezi návštěvy."
+	"logged-in-users-in-the-administration-will-not-be-recorded-as-visits": "Přihlášení uživatelé v administraci se nebudou zaznamenávat mezi návštěvy.",
+	"new-version-of-plugin": "Nová verze pluginu",
+	"is-avalaible": "je dostupná.",
+	"we-recommend-downloading-and-install-the-new-version-from": "Doporučujeme stáhnout a nainstalovat novou verzi z",
+	"or-from": "nebo z",
+	"author-website": "webu autora"
 }

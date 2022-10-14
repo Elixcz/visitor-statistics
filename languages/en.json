@@ -41,5 +41,10 @@
 	"rows-(recomended)": "rows (recomended)",
 	"the-number-of-displayed-entries-description": "",
 	"exclude-logged-in-users-from-visits-chart": "Exclude logged in users from visits chart",
-	"logged-in-users-in-the-administration-will-not-be-recorded-as-visits": "Logged in users in the administration will not be recorded as visits."
+	"logged-in-users-in-the-administration-will-not-be-recorded-as-visits": "Logged in users in the administration will not be recorded as visits.",
+	"new-version-of-plugin": "New version of plugin",
+	"is-avalaible": "is avalaible.",
+	"we-recommend-downloading-and-install-the-new-version-from": "We recommend downloading and install the new version from",
+	"or-from": "or from",
+	"author-website": "author website"
 }
