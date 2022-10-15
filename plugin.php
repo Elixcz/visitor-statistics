@@ -49,7 +49,7 @@ class visitorStatistics extends Plugin {
 	private $githubUrl = 'https://github.com/elixcz/visitor-statistics';
 
 	// Plugin site url
-	private $pluginUrl = 'https://elix.mzf.cz/statistiky-navstevnosti-pro-bludit-cms';
+	private $pluginUrl = 'https://elix.mzf.cz/plugin-visitor-statistics-pro-bludit-cms';
 
 
 

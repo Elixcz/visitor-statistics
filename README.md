@@ -34,6 +34,8 @@ Bludit plugin **Visitor Statistics** is open source and free. Donate for coffee 
 
 [BTC](bitcoin:bc1q03v5la7uvcwxr7z4qn03ex6n5edju6zv4n6ppt?message=VisitorStatistics): `bc1q03v5la7uvcwxr7z4qn03ex6n5edju6zv4n6ppt`
 
+For more information about this plugin or other templates or plugins from the author, please visit [this page](https://elix.mzf.cz/rubrika/bludit-cms).
+
 ## License
 **Visitor Statistics** is open source software licensed under the [MIT license](https://tldrlegal.com/license/mit-license).
 
